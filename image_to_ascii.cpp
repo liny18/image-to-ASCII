@@ -81,6 +81,7 @@ void show_usage(const std::string &executable_name)
                  "  -n, --negate            Get the negative of the ASCII image\n"
                  "  -f, --factor            Set the scale factor(a number from 0.0 to 1.0) to resize the image\n"
                  "  -c, --color             Get ASCII PNG's in colors\n\n";
+
     exit(EXIT_FAILURE);
 }
 
@@ -253,49 +254,6 @@ void save_output(const std::string &asciiArt, const cv::Mat &asciiImage, const s
     file.close();
 }
 
-// void process_image(const cv::Mat &image, const std::string &input_filepath, bool colored_flag, std::unique_ptr<std::string> &local_output)
-// {
-//     std::string output_filepath = get_basename(input_filepath);
-
-//     std::ofstream file("outputs/" + output_filepath + "wtf.txt");
-
-//     file << "Input: " << input_filepath << "\nOutput: " << output_filepath
-//          << ".txt\nResolution: " << image.cols << 'x' << image.rows << "\nCharacters (" << characters.size() << "): \"" << characters << "\"\n\n";
-
-//     cv::Mat asciiImage(CHARACTER_HEIGHT * image.rows, CHARACTER_WIDTH * image.cols, image.type());
-
-//     for (int i = 0; i < image.rows; i++)
-//     {
-//         for (int j = 0; j < image.cols; j++)
-//         {
-//             // Magic 🧙🏻🧙🏻‍♂️🧙🏻‍♀️
-//             cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
-//             float gray = 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2];
-//             int index = static_cast<int>(gray * (characters.size() - 1) / 255);
-
-//             char asciiChar = characters[index];
-
-//             cv::Scalar textColor = (colored_flag) ? cv::Scalar(pixel[0], pixel[1], pixel[2]) : cv::Scalar::all(255);
-
-//             cv::putText(asciiImage, std::string(1, asciiChar), cv::Point(j * CHARACTER_WIDTH, i * CHARACTER_HEIGHT + CHARACTER_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
-
-//             *local_output += asciiChar;
-//             file << asciiChar;
-//         }
-
-//         *local_output += '\n';
-//         file << '\n';
-//     }
-
-//     std::string color_output_string = (colored_flag) ? "_color" : "";
-
-//     cv::imwrite("outputs/" + output_filepath + color_output_string + "wtf.png", asciiImage);
-
-//     *local_output += "\nASCII art saved to '" + output_filepath + ".txt' and '" + output_filepath + color_output_string + ".png'\n\n";
-
-//     file.close();
-// }
-
 int main(int argc, char **argv)
 {
 
@@ -440,8 +398,6 @@ int main(int argc, char **argv)
 
         resize_image(image, desired_width, desired_height, resize_flag);
 
-        // process_image(image, input_filepath, colored_flag, local_output);
-
         // Process the image to get ASCII art string and optionally adjust the image size again for ASCII dimensions
         std::pair<std::string, cv::Mat> process_output = process_image(image, colored_flag);
 
@@ -455,6 +411,9 @@ int main(int argc, char **argv)
         save_output(processed_string, processed_image, input_filepath, colored_flag, desired_width, desired_height);
 
         *local_output += "\nASCII art saved to '" + get_basename(input_filepath) + ".txt' and '" + get_basename(input_filepath) + "_color.png'\n\n";
+
+        image.release();
+        processed_image.release();
     }
 
     if (print_flag)
