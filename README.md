@@ -1,8 +1,9 @@
-```cpp
+```
 1. Run make
 2. Usage: ./image_to_ascii -i <DIRECTORY> [Options]
 
 Options:
+    -h, --help              Display this help message
     -i, --input  <DIRECTORY>     Specify the path of the input image directory (required)
     -w, --width  <NUMBER>   Set the width of the ASCII output; maintains aspect ratio
     -s, --chars  <STRING>   Define the set of characters used in the ASCII output

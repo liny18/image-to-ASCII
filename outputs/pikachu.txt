@@ -1,46 +1,47 @@
 Input: images/pikachu.png
 Output: pikachu.txt
-Resolution: 80x0
-Characters (70): "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'. "
+Resolution: 80x74
+Characters (72): " .'`^",:;Il!i><~+_-?][}{1)(|\//tfjrxnuvczXYUJCLQ0OZmwqpbdkhao*#MWM&8%B@$"
 
-$$$$$$$$$$$$$$$$$*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$a#*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$p&@W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$o&$%W$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$%W$|++&$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$?$$$$
-$$$$$$$$$$$$o]++++8$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$^;;($$$
-$$$$$$$$$$$@_++__+B$$$$$$$$$$$$$$$$$$$$$$$$$$$$$8kB8888obhb#$$$$$$$$$$aI;;;::@$$
-$$$$$$$$$$$I+++++>$$$$$$$$$$$$$$$$$$$$$$$$k~i><__$8&88WWhd$$$$$$$$$$vi!l;I!ll,$$
-$$$$$$$$$$$:+++++-$$$$$$$$$$$$$$$$$$$$d>++______w&88W&&*$$$$$$$$$$Y_+ii!!!!_++$$
-$$$$$$$$$$$!++++~w$$$$$$$$$$$$$$$$$-+_+++++++__J88%&M$$$$$$$$$$$p++++~!~i<~+__Z$
-$$$$$$$$$$$i_++]Q^llll!<+~+i<*$$j_++__________}888$$$$$$$$$$$$o_+____~++~+++++_$
-$$$$$$$$$$$i-!!!!llll!>~____+++_?__________?]Y$$$$$$$$$$$$$$%~__________++++++~$
-$$$$$$$$$$milll!!!!i><\. %k__+++_][[[[[?}b$$$$$$$$$$$$$$$$$>------__--_______++#
-$$$$$$$$@llllllii>~_+i&@%8h<++++_][[v$$$$$$$$$$$$$$$$$$$$t]]]]]]???-------_____C
-$$$$$$$a$ u><~~+++++++|*pB!++++_?]]]]J$$$$$$$$$$$$$$$$$M[]]]]]]]]]]]]????--__l$$
-$$$$$$WL&M1__+i+++++x++++++Lftnw][]]]]a$$$$$$$$$$$$$$$<]]]]]]]]]]]]]]]]]??+$$$$$
-$$$$$$>_}~_i<_ctuLwL<+++++Ltttxcb[[[]]?@$$$$$$$$$$$$M]]]]]]]]]]]]]]]]]]+M$$$$$$$
-$$$$$$/h+++++>vYYYYX?++++>zcnnccQ][[[[[>$$$$$$$$$$$$d[[[[]]]]]]]]]]]]O$$$$$$$$$$
-$$$$$$/ta+++++}XYYzLz++_[[0ccccu-[[[[[[[t$$$$$$$$$$$$w][[[[}[[[]][($$$$$$$$$$$$$
-$$$$$$$rn!+++++\zUr/X]]][[[~oqU]]][[[[[[[*$$$$$$$$$$$$J]{])[1[[}$$$$$$$$$$$$$$$$
-$$$$$$$$vd]]][[]+m[][]]][[]]]]]]]]]][[[[[[$$$$$$$$$$$$$z()({}#$$$$$$$$$$$$$$$$$$
-$$$$$$$$$@_[[][[[]]][[]]][[]]]]]]-WI;l+_[[-$$$$$$$$$$$$$(|()$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$h[[[[[[]]][[]]]]]]]?J!{+_b-++++nB$$$$$$$$$$$o\\\)$$$$$$$$$$$$$$$$$$$
-$$$$$$k;>++++<+]]][[]]][[[][]]_C!)){)(r+++++p*$$$$$$$$Xt//ttt1$$$$$$$$$$$$$$$$$$
-$$ii++++++++++++++?]]]]]]]]]]]]|~1]/)([]-+++++\$$$$@)tttttt/$$$$$$$$$$$$$$$$$$$$
-$11u++__++++++++++++++_]]]]]]]]]q++]]][[]?++++++$$@(tttt(*$$$$$$$$$$$$$$$$$$$$$$
-%<)1+++__++++++++++++++++++++++++j>]]]]][-++++++i$$$Btftc$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$df]>~~~++~/++++++++++++++++++__+]]]]+__+++++)&$$$arXY$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$i++++++++++++++++++___________++++nW$$$pJJJQ$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$o+++++++++++++++++++________+++++__|OUJUUJXW$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$>++++++_++++++__+++++___+++______-|)bz@$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$)<++++++_____++____++++__++++____[(|UJw$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$c<<++++++++__________+++++++++___(||{uUm$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$o<<++++++++++__________++++++++?|((([$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$i~+__++++++++++_________++__[((((((r$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$x+_+_____-}|((|||||||(((||(|||(((((o$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$*(){}1||(|(|(1rJQn))||((|||(|((((t$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$@)|(||({n$$$$$$$$$$$Mz{{(|(((Jf$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$|fff$$$$$$$$$$$$$$$$$$$tjjfC$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$L{)$$$$$$$$$$$$$$$$$$$#c}Z}$$$$$$$$$$$$$$$$$$$$$$$$$$$
-$$$$$$$$$$$$$$$$$$$$$$$$$$$Mj$$$$$$$$$$$$$$$$$$$$$o_$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+                 l                                                              
+               !II                                                              
+              +".,                                                              
+             l" `,                                                              
+            `, Upb"                                                        m    
+            lmbpbb^                                                      &MMJ   
+           .pbpppb'                             ^>'^^^"!~i~;          i#MMMMW.  
+           #ppbbbh                        <dakdpp ^"^^,,i~          jho*M*ao*M  
+           Wpbbbbw                    ~kpbpppppp-"^^,",I          \ppaaooooppb  
+           obbbbb-                 qpppbbpbpppp("^^";           _bbbbdodhddbpp] 
+           apppm{8****odbbbadI  vppbpppppppppp0^^^            lqpppppbpbdppbpbq 
+           aqoooa***ookdppppppppmpppppppppqwZ/              `bppppqqqppppppbpbd 
+          ]h***oooaahdY@$`>pppppqmOOOOOm0<                 kwwqqqqqqqqqqqqqpppp;
+        .*****oaakbpbh".`^idbppbpmZOj                    zZZZmmmmwwwwwwqqqppppp(
+       i $rhkdbbbpbbppUI_'obpbpqwmZZZ|                 :OZZZZZZZZZZmmmwmwwqqpo  
+      ,)":Lppphbbpbbnppbbbb)czx?mOZZZZi               kZZZZZZZZZZZZZZZmmmmb     
+      kp0bphdpfzr)?)dbbbbp)zzznf~ZOZZZm.            :ZZZZZZZZZZZZZZZZZZb:       
+      X>pbppphj/////wbpbbk/fxxff1ZOOOOOk            +ZZZZZZZZZZZZZZZZ[          
+      Yz!bbbpp0///t)/bpqZO{ffffrwOOOOOOOz            ?ZOOOOOOOZZZZC             
+       uxobbbbbYt\uX/ZZZOOOdl_\ZZZZOOOOOOl            |mQZCZQOOO                
+        j+ZZZZZZb]ZmOZZZOZZZZZZZZZZZZOOOOZ             tJCJ00;                  
+         'pOZZOOOZZZZZZZZZZZZZZZZw,#MopqOZq             JUJC                    
+            iOZZOOZZZZOZZZZZZZZm|a0pq<wbbbpx'           lYYYL                   
+      >MkbbppkpmZZZZmZZZZZZZZZq)oCLQLCupbbbb+I        /zXXzzzL                  
+  aabbppppppbbpbbpwZZZZZZZZZZZZUdLZXCCZZqppbbbY    'CzzXXXzY                    
+ LQrbppppbbbbbpbbbbbbbqmZZZZZZZZ_pbmZZZOZmbbbbbp  .JzzzzJI                      
+`dCLbppppppbbbbppbbbbbbbpppbbpbppvhZZZZZZwbbbbpba   'Xczf                       
+     ~cZkddbbbdYbbbpbbbbpbpbpbbpbbppbZZZmpppbbbbpC"   !u//                      
+                abbbbbpbpbppbbbbpbppppppppppppppppx,   +|||1                    
+                lbpbbbbbpbbbbppbbbbpppppppppppppppqU}\|\\|/,                    
+                 hbpbpbbpppbbbppppbbbpppqbbppppqppqUL~t.                        
+                 LdpbbpbbpppppbppppppbpbppbbbpppppOJJ\|?                        
+                 fkkbbbbbbbppppppppppppbbbppbbbppqJJJQr\]                       
+                 lkkbbbpppbbbpppppppppppppbppbbbmJJJJO                          
+                  hdbpppbbbbbbbbbppppppppppppqOJJJJJJu                          
+                  nppbpppppw0JJJJJJUUUJJJJUUJJJJJJJJJl                          
+                   ICC00QJJJJJJJQu|1xCLJJJJJJJJUJJJJX                           
+                     .LUJJJJQx           :tQQJJJCJ|z                            
+                         Jccc                   zvvc(                           
+                          )0C                   ;f0[O                           
+                           :v                     !q                            
+

@@ -39,3 +39,6 @@
 *.jpeg
 *.txt
 *.pdf
+
+outputs/
+image_to_ascii
