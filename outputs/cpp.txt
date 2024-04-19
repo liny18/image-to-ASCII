@@ -1,0 +1,37 @@
+Input: images/cpp.png
+Output: cpp.txt
+Resolution: 80x0
+Characters (70): "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'. "
+
+ '<  <~ ><.`< .<" <i ><. < .<+ >< .<. +<'<< ,<. <. >< <> '<  >~ _< '<  <! ><.!< 
+~~ ~~ .~. <> ~< !~.'~' ~~.~< '~..~< ~~'.~ .~; ~~ >~' ~ .~~ ~~..~. ~~ ~~ ^~. <^ ~
+..~ .~>.<~'^~.'~,.~<.!~'.~..~~.~~.'<'njjfjx.,<'.~`.~~.>>.'~ .~>.+~.'~..~I.<~.;~.
+ .~. ~> ~~ ^~ .~" ~~ l~. ~  ~> ~~.jffjjjjjjjtr`.~` <~ i< `~' +! <~ `~  ~l ~~ ;~ 
+>+'~>'.>''<>'><'I>''>.'<>'>>'.Ifjjjjjjjjjjjjjjffji<`'>.'>~'<>.'>.'><'<>'^>''>"'>
+ .<. << ~< `< .<, << <<  <`jjfjjjjjjjjjjjjjjjjjjjfjff'<<  <  >< ~< .< .<! << l< 
+~~ ~~ .~  <i ~< l~.'~. ~rjfjjjjjjjfjjjrrxfrjjjjjjjjjjtjj<~ ~~ .~. ~> ~~ ^~  ~^ ~
+ .<  <~ ><.`< .<" ~>'ffffjjjjjjj\^..'........."tfjjjjjjjtjf'.<< ~<  <  <i << !< 
+<< <~ .<  <i <~ l]jffjjjjjjjj/..'................./fjjjjjjjffj:<. << <~ ^<  <^ <
+ .~. ~~ >~ `~ .~(jjjjjjjjfj-''.....................'?fjjjjjjnun(<~ .~  ~i <~ !~ 
+<~ << .<  <i <~ |jjjjjjjfj...........................'fjfunnunnt. << << ^<  <^ <
+'`i'`ii'!i'"i'`i/jjjjjjfj'........''.+rjfr+'.........`unnnunnnn\>i'"i'`iI'!i',i'
+ .<  <> << `< '<tjjjjjjt.........'xjjjjjjjjjjr''..'unnnnnnnnnnn\~<  <  <l << l< 
+~~ ~<  ~  <> ~< |fjjjjj.........'jjjjjjjjjjjffj+nnnuuunnnnnnnunt. ~> ~< ^~  ~^ ~
+ .<  <~ ><.`< .</jjjjfj.........tfjjjjjjjjfjunnnX..nunnnn...nun/<<  <  <i <<.l< 
+<< <~ .<  <i << |fjjjjr........Yjjjjjjjffnnunn..'..`''n.....''ut. << <~ ^<  <^ <
+ .<. <~ >< `< .</jjjjjj........vjjjfftJJJunnuu..`..`''u''...'.vt<< .<  <i << !< 
+<< <~ .<  <i << |jjjjfr'........ttnJJJJJJJJJXnunz..nnunnu...unnt. << <~ ^<  <^ <
+ .<. <~ << `< .</jjjjjj..........JJJJJJJJJJJJJU'uunuununnnunnunt<<  <  <i << !< 
+<< << .<. <! << |jjjjjjf'.........CJCJJJJJJJJU...`'Xnnnnnununnn/. << <~ ^<. <` <
+i>'!i''i''iI'i!'|jjjjjjjf`.........'.?CJJC-`..........~nunnnnunf`'iI'il'^i`'iI'i
+ .< .<~ <<.`< .</jjffjJJJC...........................`LJJJnnnun/~< .< '<i >< !< 
+<~ <~ .<  <i <~ 1fcJJJJJJJC)'......................'1CJJJJJJJnn\. << <~ ^<  <^ <
+ .<. <~ >< `< .<,,UCJJJJJJJJCc^..................`zJJJJJJJJJJUl ~< .<  <i << !< 
+<< <~ .<  <i <~ I<.'!JCJJJJJJJJJu''. .........'uCJJJJJJJJJUi<. <. << <~ ^<  <^ <
+ .<. <~ << `< .<" << ~<.QJJJJJJJJJCCCJCCCJCJCJJJJJJJJJCL'.<. <~ ~<  <  <i << !< 
+<< << .<  <i << I< .<. ~<.~vJJJJJJJJJJJJJJJJJJJJJJJJr<..<~ ~<  <  << <~ "<  <" <
+'.<''<~'>< "<''<,'<<'><''>'.<_'JUJJJJJJJJJJJJJJUU''i<'<<'.< '~<'><'.<'`<i'><.i<'
+~< <+ `~. >! ~> I~. ~' <~.~+ .<..iQJJJJJJJJJJL~~.!~. ~'`~~ >~ .~' ~> ~~ ,~' <, ~
+<<.~<..<..<i.<~.I<..<'.><.<>.'<..<>.<QJJJJZ<;.<~.!<'.<'.<<.~<''<..<>.<~.^<..<".<
+. <'.<~.~<.`<..<,.<<.><..<..<<.~<..<..~<'<~.:<..<..><.~~.'< .~~.~<. <. <!.<<.!<.
+~> ~< .~  <> ~~ !~ .~. <~.~> '~ .~< ~~. ~ .~I <~ <~. ~ .~~ +~. ~' ~~ ~+ "~. <^ ~

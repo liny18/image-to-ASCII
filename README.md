@@ -11,5 +11,5 @@ Options:
     -f, --factor            Set the scale factor to resize the image(0.0 - 1.0)
     -c, --color             Get ASCII PNGs in colors
 3. (Optional)Run 'Python3 generateImage.py <num>'
-    There are 5 pre-generated images. However, if you wish to get new images, run this command, but make sure you have an Unsplash API key.
+    There are 4 pre-generated images. However, if you wish to get new images, run this command, but make sure you have an Unsplash API key.
 ```
