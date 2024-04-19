@@ -6,20 +6,63 @@
 #include <cstdlib>
 #include <getopt.h>
 #include <opencv2/opencv.hpp>
-#include <filesystem>
+// #include <filesystem>
 #include <mpi.h>
+#include <sys/stat.h>
+#include <dirent.h>
+#include <unistd.h>
 
-namespace fs = std::filesystem;
+// namespace fs = std::filesystem;
 
-// default configuration for ASCII art
-int CHAR_WIDTH = 10;
-int CHAR_HEIGHT = 18;
+int CHARACTER_WIDTH = 10;
+int CHARACTER_HEIGHT = 18;
 float SCALE_FACTOR = 1.0;
 
 // default characters used for ASCII art
 std::string characters = " .'`^\",:;Il!i><~+_-?][}{1)(|\\//tfjrxnuvczXYUJCLQ0OZmwqpbdkhao*#MWM&8%B@$";
 
-// reversing the characters creates a negative image
+// Check if a directory exists
+bool directory_exists(const std::string &path)
+{
+    struct stat buffer;
+    return (stat(path.c_str(), &buffer) == 0);
+}
+
+// Create a directory
+bool create_directory(const std::string &path)
+{
+    return (mkdir(path.c_str(), 0777) == 0);
+}
+
+// Check if a file exists
+bool file_exists(const std::string &name)
+{
+    return (access(name.c_str(), F_OK) != -1);
+}
+
+// Remove a file
+bool remove_file(const std::string &name)
+{
+    return (remove(name.c_str()) == 0);
+}
+
+// Iterate over files in a directory
+void iterate_directory(const std::string &path)
+{
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir(path.c_str())) != nullptr)
+    {
+        while ((ent = readdir(dir)) != nullptr)
+        {
+            std::string file_name = ent->d_name;
+            // process file_name
+        }
+        closedir(dir);
+    }
+}
+
+// reverse the characters used for ASCII art. This is used to get the negative of the ASCII image
 void reverse_string(std::string &str)
 {
     std::reverse(str.begin(), str.end());
@@ -57,14 +100,25 @@ std::string get_basename(const std::string &full_path)
 // need to make sure we're writing to a new file and directory
 void check_output_directory()
 {
-    if (!fs::exists("outputs"))
+    // if (!fs::exists("outputs"))
+    // {
+    //     fs::create_directory("outputs");
+    // }
+
+    if (!directory_exists("outputs"))
     {
-        fs::create_directory("outputs");
+        create_directory("outputs");
     }
 
-    if (fs::exists("outputs/all_output.txt"))
+    // if (fs::exists("outputs/all_output.txt"))
+    // {
+    //     fs::remove("outputs/all_output.txt");
+    // }
+
+    // Instead of fs::remove
+    if (file_exists("outputs/all_output.txt"))
     {
-        fs::remove("outputs/all_output.txt");
+        remove_file("outputs/all_output.txt");
     }
 }
 
@@ -146,14 +200,14 @@ void resize_image(cv::Mat &image, int &desired_width, int &desired_height, bool 
         desired_height = image.rows;
     }
 
-    cv::resize(image, image, cv::Size(static_cast<int>(desired_width * SCALE_FACTOR), static_cast<int>(desired_height * SCALE_FACTOR * (static_cast<float>(CHAR_WIDTH) / CHAR_HEIGHT))));
+    cv::resize(image, image, cv::Size(static_cast<int>(desired_width * SCALE_FACTOR), static_cast<int>(desired_height * SCALE_FACTOR * (static_cast<float>(CHARACTER_WIDTH) / CHARACTER_HEIGHT))));
 }
 
 // process the image to get the ASCII art string and the ASCII image
 std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored_flag)
 {
     std::string asciiArt;
-    cv::Mat asciiImage(CHAR_HEIGHT * image.rows, CHAR_WIDTH * image.cols, image.type());
+    cv::Mat asciiImage(CHARACTER_HEIGHT * image.rows, CHARACTER_WIDTH * image.cols, image.type());
 
     for (int i = 0; i < image.rows; i++)
     {
@@ -168,7 +222,7 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
 
             cv::Scalar textColor = (colored_flag) ? cv::Scalar(pixel[0], pixel[1], pixel[2]) : cv::Scalar::all(255);
 
-            cv::putText(asciiImage, std::string(1, asciiChar), cv::Point(j * CHAR_WIDTH, i * CHAR_HEIGHT + CHAR_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
+            cv::putText(asciiImage, std::string(1, asciiChar), cv::Point(j * CHARACTER_WIDTH, i * CHARACTER_HEIGHT + CHARACTER_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
 
             asciiArt += asciiChar;
         }
@@ -208,7 +262,7 @@ void save_output(const std::string &asciiArt, const cv::Mat &asciiImage, const s
 //     file << "Input: " << input_filepath << "\nOutput: " << output_filepath
 //          << ".txt\nResolution: " << image.cols << 'x' << image.rows << "\nCharacters (" << characters.size() << "): \"" << characters << "\"\n\n";
 
-//     cv::Mat asciiImage(CHAR_HEIGHT * image.rows, CHAR_WIDTH * image.cols, image.type());
+//     cv::Mat asciiImage(CHARACTER_HEIGHT * image.rows, CHARACTER_WIDTH * image.cols, image.type());
 
 //     for (int i = 0; i < image.rows; i++)
 //     {
@@ -223,7 +277,7 @@ void save_output(const std::string &asciiArt, const cv::Mat &asciiImage, const s
 
 //             cv::Scalar textColor = (colored_flag) ? cv::Scalar(pixel[0], pixel[1], pixel[2]) : cv::Scalar::all(255);
 
-//             cv::putText(asciiImage, std::string(1, asciiChar), cv::Point(j * CHAR_WIDTH, i * CHAR_HEIGHT + CHAR_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
+//             cv::putText(asciiImage, std::string(1, asciiChar), cv::Point(j * CHARACTER_WIDTH, i * CHARACTER_HEIGHT + CHARACTER_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
 
 //             *local_output += asciiChar;
 //             file << asciiChar;
@@ -313,16 +367,46 @@ int main(int argc, char **argv)
     // Ensure the header is written before other ranks start writing
     MPI_Barrier(MPI_COMM_WORLD);
 
+    // std::vector<std::string> input_files;
+
+    // for (const auto &entry : fs::directory_iterator(input_directory))
+    // {
+    //     std::string extension = entry.path().extension().string();
+    //     if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+    //     {
+    //         continue;
+    //     }
+    //     input_files.push_back(entry.path().string());
+    // }
+
     std::vector<std::string> input_files;
 
-    for (const auto &entry : fs::directory_iterator(input_directory))
+    DIR *dir = opendir(input_directory.c_str());
+    if (dir != nullptr)
     {
-        std::string extension = entry.path().extension().string();
-        if (extension != ".jpg" && extension != ".jpeg" && extension != ".png")
+        struct dirent *entry;
+        while ((entry = readdir(dir)) != nullptr)
         {
-            continue;
+            // Check if the entry is a regular file
+            if (entry->d_type == DT_REG)
+            {
+                std::string file_name = entry->d_name;
+                // Extract file extension and convert to lower case for comparison
+                std::string extension;
+                size_t dot_pos = file_name.rfind('.');
+                if (dot_pos != std::string::npos && dot_pos + 1 < file_name.length())
+                {
+                    extension = file_name.substr(dot_pos);
+                    std::transform(extension.begin(), extension.end(), extension.begin(), ::tolower);
+                }
+                // Check if the file is an image based on the extension
+                if (extension == ".jpg" || extension == ".jpeg" || extension == ".png")
+                {
+                    input_files.push_back(input_directory + '/' + file_name);
+                }
+            }
         }
-        input_files.push_back(entry.path().string());
+        closedir(dir);
     }
 
     int num_files = input_files.size();

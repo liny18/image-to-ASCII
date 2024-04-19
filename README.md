@@ -13,4 +13,6 @@ Options:
     -c, --color             Get ASCII PNGs in colors
 3. (Optional)Run 'Python3 generateImage.py <num>'
     There are 4 pre-generated images. However, if you wish to get new images, run this command, but make sure you have an Unsplash API key.
+
+Note: AIMOS might take some time for images to write to outputs folder. Please be patient
 ```

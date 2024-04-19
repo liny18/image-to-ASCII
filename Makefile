@@ -1,5 +1,5 @@
 CXX := mpicxx  # Use the MPI wrapper compiler for C++
-CXXFLAGS := -std=c++17 -Wall -O2 $(shell pkg-config --cflags opencv4)
+CXXFLAGS := -std=c++14 -Wall -O2 $(shell pkg-config --cflags opencv4)
 LDFLAGS := $(shell pkg-config --libs opencv4)
 
 # Name of the executable
