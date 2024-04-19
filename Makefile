@@ -6,7 +6,7 @@ LDFLAGS := $(shell pkg-config --libs opencv4)
 TARGET := image_to_ascii
 
 # Source files
-SRC := image_to_ascii.cpp
+SRC := main.cpp image_processing.cpp utils.cpp constants.cpp
 # Object files
 OBJ := $(SRC:.cpp=.o)
 
