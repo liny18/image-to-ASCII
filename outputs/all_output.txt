@@ -1,4 +1,4 @@
-./image_to_ascii -i images -w 80 -p -c 
+./image_to_ascii -i images -w 80 
 
                   'l~<~l.."                                                     
                vXLdhpvwZOJu\)-;'"                                               
@@ -56,7 +56,7 @@
 
 ASCII art saved to 'hwoarang.txt' and 'hwoarang_color.png'
 
-                                       
+                                             
                !II                                                              
               +".,                                                              
              l" `,                                                              
