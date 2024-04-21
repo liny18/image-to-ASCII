@@ -255,6 +255,8 @@ int main(int argc, char **argv)
     int desired_height = 0;
     cv::Mat input_image;
 
+    map_rank_to_gpu(my_rank);
+
     if (my_rank == 0)
     {
         input_image = load_image(input_filepath);
