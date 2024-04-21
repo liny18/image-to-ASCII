@@ -11,6 +11,6 @@ Options:
     -r, --reverse           Reverse the character set used for ASCII output(This option usually results in better PNGs)
     -f, --factor  <FLOAT>   Set the scale factor from 0.1 to 1.0 (default) to resize the image
     -c, --color             Get ASCII PNGs in colors
-3. (Optional)Run 'Python generateImage.py <num>'
+3. (Optional)Run 'python generateImage.py <num>'
     There are 4 pre-generated images. However, if you wish to get new images, run this command, but make sure you have an Unsplash API key.
 ```
