@@ -110,7 +110,7 @@ void gather_and_save_ascii_art(cv::Mat &asciiImage, int rank, int size, const st
 }
 
 // write the ASCII art to a file using MPI I/O
-void write_ascii_art_to_file(const std::string &ascii_art, const std::string &output_filepath, MPI_Comm comm, int my_rank, int num_ranks, int argc, char **argv)
+void write_ascii_art_to_file(const std::string &ascii_art, const std::string &output_filepath, MPI_Comm comm, int my_rank, int num_ranks, int argc, char **argv, int width, int height)
 {
     MPI_File fh;
     MPI_Status status;
@@ -121,13 +121,13 @@ void write_ascii_art_to_file(const std::string &ascii_art, const std::string &ou
 
     if (my_rank == 0)
     {
-        header += "Ranks: " + std::to_string(num_ranks) + "\n";
         header += std::string(argv[0]) + " ";
         for (int i = 1; i < argc; ++i)
         {
             header += std::string(argv[i]) + " ";
         }
-        header += "\n\n";
+        header += "\n";
+        header += "Dimensions: " + std::to_string(width) + "x" + std::to_string(height) + "\n\n";
     }
 
     // Broadcast the size of the header to all processes
@@ -291,7 +291,7 @@ int main(int argc, char **argv)
     gather_and_save_ascii_art(processed_image, my_rank, num_ranks, output_filepath, colored_flag);
 
     // Write the ASCII art to a file
-    write_ascii_art_to_file(processed_string, output_filepath, MPI_COMM_WORLD, my_rank, num_ranks, argc, argv);
+    write_ascii_art_to_file(processed_string, output_filepath, MPI_COMM_WORLD, my_rank, num_ranks, argc, argv, desired_width, desired_height);
 
     if (my_rank == 0)
     {
