@@ -35,6 +35,10 @@
 .env
 
 *.pdf
+*.png
+*.jpg
+*.jpeg
+*.txt
 
 image_to_ascii
 backups/
