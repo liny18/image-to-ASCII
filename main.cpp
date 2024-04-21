@@ -238,7 +238,7 @@ int main(int argc, char **argv)
         }
 
         // Check if the input file exists
-        check_file_exist();
+        check_file_exist(input_filepath);
     }
 
     // Broadcast the configuration to all ranks

@@ -25,11 +25,8 @@ bool file_exists(const std::string &name);
 // Remove a file
 bool remove_file(const std::string &name);
 
-// Iterate over files in a directory
-void iterate_directory(const std::string &path);
-
 // Need to make sure we're writing to a new file and directory
-void check_file_exist();
+void check_file_exist(const std::string &input_filepath);
 
 // Get the list of image files in a directory
 void get_image_files(const std::string &path, std::vector<std::string> &files);

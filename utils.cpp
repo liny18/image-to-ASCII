@@ -29,16 +29,18 @@ bool remove_file(const std::string &name)
 }
 
 // need to make sure we're writing to a new file and directory
-void check_file_exist()
+void check_file_exist(const std::string &input_filepath)
 {
+    std::string input_filename = get_basename(input_filepath);
+
     if (!directory_exists("outputs"))
     {
         create_directory("outputs");
     }
 
-    if (file_exists("outputs/all_output.txt"))
+    if (file_exists("outputs/" + input_filename + ".txt"))
     {
-        remove_file("outputs/all_output.txt");
+        remove_file("outputs/" + input_filename + ".txt");
     }
 }
 
