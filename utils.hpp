@@ -44,6 +44,6 @@ void show_usage(const std::string &executable_name);
 std::string get_basename(const std::string &full_path);
 
 // Parse the command line arguments and set the configuration
-void parse_arguments(int argc, char **argv, std::string &input_directory, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag);
+void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag);
 
 #endif // __UTILS_HPP__
