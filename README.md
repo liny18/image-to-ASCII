@@ -15,8 +15,9 @@ Options:
     -c, --color             Get ASCII PNGs in colors
     -t, --threads <INT>     Set the number of threads to use, default is 256
 3. (Optional) Run 'python generateImage.py <INT> (number of images)'
-    There are 4 pre-generated images. However, if you wish to use new images (note that existing images will be replaced), run this command, but make sure you have an Unsplash API key saved in a .env file. Alternatively, you can also just add more images locally. :)
-    
+    There are 4 pre-generated images. However, if you wish to use new images (note that existing
+    images will be replaced), run this command, but make sure you have an Unsplash API key saved
+    in a .env file. Alternatively, you can also just add more images locally. :)    
 Notes:
     OpenCV generates many warnings, but they do not affect the usabity of the program, savely ignore.
 ```
