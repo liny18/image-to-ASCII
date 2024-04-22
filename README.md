@@ -2,7 +2,7 @@
 ```
 Pre-req: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
 1. Compile with 'make'
-2. Usage: 'mpirun -np [INT] (number of processes) ./image_to_ascii -i <FILE> [Options]'
+2. Usage: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
     -i, --input  <FILE>     Specify the path of the input image filepath (required)
     -o, --output <STRING>   Specify the path of the output file name (e.g. image)
@@ -12,7 +12,7 @@ Options:
     -n, --negate            Create a negative ASCII art
     -f, --factor <FLOAT>    Set the scale factor from 0.1 to 1.0 (default) to resize the image
     -c, --color             Get ASCII PNGs in colors
-3. (Optional)Run 'python generateImage.py <num>'
+3. (Optional)Run 'python generateImage.py <INT>'
     There are 4 pre-generated images. However, if you wish to use new images (note that existing images will be replaced),
     run this command, but make sure you have an Unsplash API key saved in a .env file.
 ```
