@@ -63,7 +63,7 @@ void show_usage(const std::string &executable_name)
                  "  -p, --print             Print the ASCII output to the console\n"
                  "  -n, --negate            Get the negative of the ASCII image\n"
                  "  -f, --factor  <FLOAT>   Set the scale factor from 0.1 to 1.0 (default) to resize the image\n"
-                 "  -c, --color             Get ASCII PNG's in colors\n\n";
+                 "  -c, --color             Get ASCII PNG's in colors\n"
                  "  -t, --threads <INT>     Set the number of threads to use, default is 256\n\n";
 }
 
@@ -81,9 +81,11 @@ std::string get_basename(const std::string &full_path)
 }
 
 // calculate the dimensions of the block that multiply to the total number of threads
-std::pair<int, int> calculate_thread_dimensions(int thread_count) {
+std::pair<int, int> calculate_thread_dimensions(int thread_count)
+{
     int x = static_cast<int>(std::sqrt(thread_count));
-    while (thread_count % x != 0) {
+    while (thread_count % x != 0)
+    {
         --x;
     }
     int y = thread_count / x;
@@ -91,7 +93,7 @@ std::pair<int, int> calculate_thread_dimensions(int thread_count) {
 }
 
 // parse the command line arguments and set the configuration
-void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int & thread_count)
+void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int &thread_count)
 {
     struct option long_options[] = {
         {"help", no_argument, nullptr, 'h'},
