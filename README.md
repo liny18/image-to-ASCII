@@ -10,7 +10,7 @@ Options:
     -s, --chars  <STRING>   Define the set of characters used in the ASCII output
     -p, --print             Print the ASCII output to the console
     -n, --negate            Create a negative ASCII art
-    -f, --factor  <FLOAT>   Set the scale factor from 0.1 to 1.0 (default) to resize the image
+    -f, --factor <FLOAT>    Set the scale factor from 0.1 to 1.0 (default) to resize the image
     -c, --color             Get ASCII PNGs in colors
 3. (Optional)Run 'python generateImage.py <num>'
     There are 4 pre-generated images. However, if you wish to use new images (note that existing images will be replaced),
