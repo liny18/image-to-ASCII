@@ -4,6 +4,7 @@ Pre-req: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
 1. Compile with 'make'
 2. Usage: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
+    -h, --help              Display this help message
     -i, --input  <FILE>     Specify the path of the input image filepath (required)
     -o, --output <STRING>   Specify the name of the output file name (e.g. image)
     -w, --width  <INT>      Set the width of the ASCII output; maintains aspect ratio
@@ -14,8 +15,7 @@ Options:
     -c, --color             Get ASCII PNGs in colors
 3. (Optional)Run 'python generateImage.py <INT> (number of images)'
     There are 4 pre-generated images. However, if you wish to use new images (note that existing images will be replaced),
-    run this command, but make sure you have an Unsplash API key saved in a .env file. Alternatively, you can also just
-    add more images locally. :)
+    run this command, but make sure you have an Unsplash API key saved in a .env file. Alternatively, you can also just add more images locally. :)
 ```
 
 ## Examples :eyes:

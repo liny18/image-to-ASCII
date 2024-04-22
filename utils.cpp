@@ -53,11 +53,11 @@ void reverse_string(std::string &str)
 // display the usage of the program
 void show_usage(const std::string &executable_name)
 {
-    std::cerr << "\nUsage: " << executable_name << " -i <FILE> [options] \n\n";
+    std::cerr << "\nUsage: mpirun -np <INT> (number of processes) " << executable_name << " -i <FILE> [Options] \n\n";
     std::cerr << "Options:\n"
                  "  -h, --help              Display this help message\n"
                  "  -i, --input  <FILE>     Specify the path of the input image FILE (required)\n"
-                 "  -o, --output <FILE>     Specify the path of the output filepath without the file extension (eg. images/image)\n"
+                 "  -o, --output <STRING>   Specify the name of the output file name (e.g. image)\n"
                  "  -w, --width  <INT>      Set the width of the ASCII output; maintains aspect ratio\n"
                  "  -s, --chars  <STRING>   Define the set of characters used in the ASCII output\n"
                  "  -p, --print             Print the ASCII output to the console\n"

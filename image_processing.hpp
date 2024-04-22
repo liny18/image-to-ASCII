@@ -8,7 +8,7 @@
 // map each rank to a GPU
 void map_rank_to_gpu(int my_rank);
 
-// load the image from the input directory
+// load the image from the input file path
 cv::Mat load_image(const std::string &input_filepath);
 
 // resize the image to the desired width and height

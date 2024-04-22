@@ -16,31 +16,34 @@ int cudaDeviceCount;
 cudaError_t cE;
 
 // map each rank to a GPU
-void map_rank_to_gpu(int my_rank) {
+void map_rank_to_gpu(int my_rank)
+{
 
-    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess) {
+    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess)
+    {
         std::cerr << "Unable to determine cuda device count, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 
     // Assign GPU (simple round-robin)
     int assignedGpu = my_rank % cudaDeviceCount;
-    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess) {
+    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess)
+    {
         std::cerr << "Unable to set cuda device, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 }
 
-// Load an image directly into GPU memory
-cv::Mat load_image(const std::string &input_filepath) 
+// Load an image from the input file path
+cv::Mat load_image(const std::string &input_filepath)
 {
     cv::Mat image = cv::imread(input_filepath, cv::IMREAD_COLOR);
 
-    if (image.empty()) 
+    if (image.empty())
     {
         throw std::runtime_error("Could not read the image: " + input_filepath);
     }
-    
+
     return image;
 }
 
