@@ -14,7 +14,8 @@ Options:
     -c, --color             Get ASCII PNGs in colors
 3. (Optional)Run 'python generateImage.py <INT> (number of images)'
     There are 4 pre-generated images. However, if you wish to use new images (note that existing images will be replaced),
-    run this command, but make sure you have an Unsplash API key saved in a .env file.
+    run this command, but make sure you have an Unsplash API key saved in a .env file. Alternatively, you can also just
+    add more images locally. :)
 ```
 
 ## Examples :eyes:
