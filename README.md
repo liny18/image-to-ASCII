@@ -5,7 +5,7 @@ Pre-req: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
 2. Usage: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
     -i, --input  <FILE>     Specify the path of the input image filepath (required)
-    -o, --output <STRING>   Specify the path of the output file name (e.g. image)
+    -o, --output <STRING>   Specify the name of the output file name (e.g. image)
     -w, --width  <INT>      Set the width of the ASCII output; maintains aspect ratio
     -s, --chars  <STRING>   Define the set of characters used in the ASCII output
     -p, --print             Print the ASCII output to the console
