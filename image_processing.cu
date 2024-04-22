@@ -2,10 +2,7 @@
 #include <string>
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <opencv2/core.hpp>
-#include <opencv2/core/cuda.hpp>
-#include <opencv2/cudawarping.hpp>
-#include <opencv2/cudaimgproc.hpp>
+#include <opencv2/opencv.hpp>
 
 #include "image_processing.hpp"
 #include "constants.hpp"
@@ -16,48 +13,41 @@ int cudaDeviceCount;
 cudaError_t cE;
 
 // map each rank to a GPU
-void map_rank_to_gpu(int my_rank)
+void map_rank_to_gpu(int my_rank) 
 {
-
-    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess)
-    {
+    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess) {
         std::cerr << "Unable to determine cuda device count, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 
     // Assign GPU (simple round-robin)
     int assignedGpu = my_rank % cudaDeviceCount;
-    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess)
-    {
+    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess) {
         std::cerr << "Unable to set cuda device, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 }
 
 // Load an image from the input file path
-cv::Mat load_image(const std::string &input_filepath)
+cv::Mat load_image(const std::string &input_filepath) 
 {
     cv::Mat image = cv::imread(input_filepath, cv::IMREAD_COLOR);
 
-    if (image.empty())
+    if (image.empty()) 
     {
         throw std::runtime_error("Could not read the image: " + input_filepath);
     }
-
+    
     return image;
 }
 
 // resize the image to the desired width and height
 void resize_image(cv::Mat &image, int &desired_width, int &desired_height)
 {
-    cv::cuda::GpuMat gpu_image;
-    gpu_image.upload(image);
-
-    cv::cuda::resize(gpu_image, gpu_image, cv::Size(static_cast<int>(desired_width * SCALE_FACTOR), static_cast<int>(desired_height * SCALE_FACTOR * (static_cast<float>(CHARACTER_WIDTH) / CHARACTER_HEIGHT))));
-
-    gpu_image.download(image);
+    cv::resize(image, image, cv::Size(static_cast<int>(desired_width * SCALE_FACTOR), static_cast<int>(desired_height * SCALE_FACTOR * (static_cast<float>(CHARACTER_WIDTH) / CHARACTER_HEIGHT))));
 }
 
+// Split the image into equal parts for each rank
 cv::Mat split_image(const cv::Mat &full_image, int my_rank, int num_ranks)
 {
     int rows = full_image.rows;
@@ -74,44 +64,78 @@ cv::Mat split_image(const cv::Mat &full_image, int my_rank, int num_ranks)
     // Ensure end_row does not exceed the last row of the image
     end_row = std::min(end_row, rows - 1);
 
-    cv::cuda::GpuMat gpu_full_image;
-    gpu_full_image.upload(full_image);
-
-    cv::cuda::GpuMat gpu_image = gpu_full_image.rowRange(start_row, end_row + 1).clone();
-
-    cv::Mat image;
-    gpu_image.download(image);
-
-    return image;
+    return full_image.rowRange(start_row, end_row + 1).clone();
 }
 
-// process the image to get the ASCII art string and the ASCII image
-std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored_flag)
+// Convert the image to ASCII art
+__global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char* output, int width, const char* device_characters, int numChars)
 {
-    std::string ascii_art;
+    int x = blockIdx.x * blockDim.x + threadIdx.x;
+    int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-    cv::Mat ascii_image(CHARACTER_HEIGHT * image.rows, CHARACTER_WIDTH * image.cols, CV_8UC3, cv::Scalar(0, 0, 0));
-
-    for (int i = 0; i < image.rows; i++)
+    if (x < width && y < input.rows)
     {
-        for (int j = 0; j < image.cols; j++)
-        {
-            // Magic 🧙🏻🧙🏻‍♂️🧙🏻‍♀️
-            cv::Vec3b pixel = image.at<cv::Vec3b>(i, j);
+        uchar3 pixel = input(y, x);
+        // Magic 🧙🏻🧙🏻‍♂️🧙🏻‍♀️
+        float gray = 0.299f * pixel.x + 0.587f * pixel.y + 0.114f * pixel.z;
+        int index = static_cast<int>(gray * (numChars - 1) / 255.0);
+        index = max(0, min(index, numChars - 1));
+        char asciiChar = device_characters[index];
 
-            float gray = 0.299 * pixel[0] + 0.587 * pixel[1] + 0.114 * pixel[2];
-            int index = static_cast<int>(gray * (CHARACTERS.size() - 1) / 255);
-            char asciiChar = CHARACTERS[index];
+        output[y * width + x] = asciiChar;
+    }
+}
 
-            cv::Scalar textColor = (colored_flag) ? cv::Scalar(pixel[0], pixel[1], pixel[2]) : cv::Scalar::all(255);
+// Process the image on the GPU and return the ASCII art and the ASCII image
+std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored_flag, int threads_x, int threads_y)
+{
+    cv::cuda::GpuMat d_image(image);
+    size_t num_chars = image.rows * image.cols;
+    char* d_ascii_art;
+    cudaMalloc(&d_ascii_art, sizeof(char) * num_chars);
 
-            cv::putText(ascii_image, std::string(1, asciiChar), cv::Point(j * CHARACTER_WIDTH, i * CHARACTER_HEIGHT + CHARACTER_HEIGHT), cv::FONT_HERSHEY_SIMPLEX, 0.5, textColor, 1);
+    // Transfer CHARACTERS to device
+    const char* device_characters;
+    size_t char_size = CHARACTERS.size();
+    cudaMalloc(&device_characters, char_size);
+    cudaMemcpy((void*)device_characters, CHARACTERS.c_str(), char_size, cudaMemcpyHostToDevice);
 
-            ascii_art += asciiChar;
-        }
+    dim3 threadsPerBlock(threads_x, threads_y);
+    dim3 numBlocks((image.cols + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                   (image.rows + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
-        ascii_art += '\n';
+    imageToAsciiKernel<<<numBlocks, threadsPerBlock>>>(d_image, d_ascii_art, image.cols, device_characters, char_size);
+    cudaDeviceSynchronize();
+
+    // Copy the ASCII art from device to host
+    std::vector<char> ascii_art(num_chars);
+    cudaMemcpy(&ascii_art[0], d_ascii_art, sizeof(char) * num_chars, cudaMemcpyDeviceToHost);
+
+    std::string ascii_art_str;
+    // Extra space for newlines
+    ascii_art_str.reserve(num_chars + image.rows);
+    for (int i = 0; i < image.rows; ++i) 
+    {
+        ascii_art_str.append(&ascii_art[i * image.cols], image.cols);
+        ascii_art_str.push_back('\n');
     }
 
-    return std::make_pair(ascii_art, ascii_image);
+    cudaFree(d_ascii_art);
+
+    // Handling the drawing on host
+    cv::Mat ascii_image = cv::Mat::zeros(image.rows * 18, image.cols * 10, CV_8UC3);
+    for (int y = 0; y < image.rows; ++y) 
+    {
+        for (int x = 0; x < image.cols; ++x) 
+        {
+            // Get the character at the current position
+            std::string text(1, ascii_art[y * image.cols + x]);
+            int posX = x * CHARACTER_WIDTH;
+            int posY = y * CHARACTER_HEIGHT + CHARACTER_HEIGHT;
+            cv::Scalar color = colored_flag ? image.at<cv::Vec3b>(y, x) : cv::Scalar::all(255);
+            cv::putText(ascii_image, text, cv::Point(posX, posY), cv::FONT_HERSHEY_SIMPLEX, 0.5, color, 1);
+        }
+    }
+
+    return std::make_pair(ascii_art_str, ascii_image);
 }

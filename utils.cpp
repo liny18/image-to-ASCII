@@ -53,17 +53,18 @@ void reverse_string(std::string &str)
 // display the usage of the program
 void show_usage(const std::string &executable_name)
 {
-    std::cerr << "\nUsage: mpirun -np <INT> (number of processes) " << executable_name << " -i <FILE> [Options] \n\n";
+    std::cerr << "\nUsage: " << executable_name << " -i <FILE> [options] \n\n";
     std::cerr << "Options:\n"
                  "  -h, --help              Display this help message\n"
                  "  -i, --input  <FILE>     Specify the path of the input image FILE (required)\n"
-                 "  -o, --output <STRING>   Specify the name of the output file name (e.g. image)\n"
+                 "  -o, --output <FILE>     Specify the path of the output filepath without the file extension (eg. images/image)\n"
                  "  -w, --width  <INT>      Set the width of the ASCII output; maintains aspect ratio\n"
                  "  -s, --chars  <STRING>   Define the set of characters used in the ASCII output\n"
                  "  -p, --print             Print the ASCII output to the console\n"
                  "  -n, --negate            Get the negative of the ASCII image\n"
                  "  -f, --factor  <FLOAT>   Set the scale factor from 0.1 to 1.0 (default) to resize the image\n"
                  "  -c, --color             Get ASCII PNG's in colors\n\n";
+                 "  -t, --threads <INT>     Set the number of threads to use, default is 256\n\n";
 }
 
 // get the basename of a file, used to match the output file name with the input file name
@@ -79,8 +80,18 @@ std::string get_basename(const std::string &full_path)
     return basename;
 }
 
+// calculate the dimensions of the block that multiply to the total number of threads
+std::pair<int, int> calculate_thread_dimensions(int thread_count) {
+    int x = static_cast<int>(std::sqrt(thread_count));
+    while (thread_count % x != 0) {
+        --x;
+    }
+    int y = thread_count / x;
+    return {x, y};
+}
+
 // parse the command line arguments and set the configuration
-void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag)
+void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int & thread_count)
 {
     struct option long_options[] = {
         {"help", no_argument, nullptr, 'h'},
@@ -92,10 +103,11 @@ void parse_arguments(int argc, char **argv, std::string &input_filepath, std::st
         {"negate", no_argument, nullptr, 'n'},
         {"factor", required_argument, nullptr, 'f'},
         {"color", no_argument, nullptr, 'c'},
+        {"threads", required_argument, nullptr, 't'},
         {0, 0, 0, 0}};
 
     int option;
-    const char *short_options = "hi:o:w:s:pncf:";
+    const char *short_options = "hi:o:w:s:pnf:ct:";
     while ((option = getopt_long(argc, argv, short_options, long_options, nullptr)) != EOF)
     {
         switch (option)
@@ -129,6 +141,9 @@ void parse_arguments(int argc, char **argv, std::string &input_filepath, std::st
         case 'c':
             colored_flag = true;
             break;
+        case 't':
+            thread_count = std::atoi(optarg);
+            break;
         default:
             show_usage(executable_name);
         }
@@ -137,5 +152,10 @@ void parse_arguments(int argc, char **argv, std::string &input_filepath, std::st
     if (output_filepath.empty())
     {
         output_filepath = get_basename(input_filepath);
+    }
+
+    if (thread_count == 0)
+    {
+        thread_count = 256;
     }
 }

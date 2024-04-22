@@ -13,7 +13,7 @@
 using namespace constants;
 
 // broadcast the configuration to all ranks since only rank 0 reads the command line arguments
-void broadcast_config(std::string &input_filepath, std::string &output_filepath, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int rank, std::string &CHARACTERS)
+void broadcast_config(std::string &input_filepath, std::string &output_filepath, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int rank, std::string &CHARACTERS, int &threads_x, int &threads_y)
 {
 
     int chars_length = CHARACTERS.size();
@@ -51,21 +51,23 @@ void broadcast_config(std::string &input_filepath, std::string &output_filepath,
     MPI_Bcast(&negate_flag, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD);
     MPI_Bcast(&colored_flag, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD);
     MPI_Bcast(&help_flag, 1, MPI_C_BOOL, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&threads_x, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&threads_y, 1, MPI_INT, 0, MPI_COMM_WORLD);
 }
 
 // broadcast the image dimensions and type to all ranks
-void broadcast_image(cv::Mat &image, int my_rank, MPI_Comm comm)
+void broadcast_image(cv::Mat &image, int my_rank, MPI_Comm comm) 
 {
     int dims[3] = {image.rows, image.cols, image.type()};
     MPI_Bcast(dims, 3, MPI_INT, 0, comm);
 
-    if (my_rank != 0)
-    {
+    if (my_rank != 0) {
         image.create(dims[0], dims[1], dims[2]);
     }
 
     MPI_Bcast(image.data, image.total() * image.elemSize(), MPI_BYTE, 0, comm);
 }
+
 
 // gather the ASCII art from all ranks and save it to a file
 void gather_and_save_ascii_art(cv::Mat &asciiImage, int rank, int size, const std::string &output_filepath, bool colored_flag)
@@ -120,7 +122,8 @@ void write_ascii_art_to_file(const std::string &ascii_art, const std::string &ou
     std::string header;
 
     if (my_rank == 0)
-    {
+    {   
+        header += "mpirun -np " + std::to_string(num_ranks) + " ";
         header += std::string(argv[0]) + " ";
         for (int i = 1; i < argc; ++i)
         {
@@ -226,10 +229,11 @@ int main(int argc, char **argv)
     bool resize_flag = false;
     bool help_flag = false;
     int desired_width = 0;
+    int thread_count = 0;
 
     if (my_rank == 0)
     {
-        parse_arguments(argc, argv, input_filepath, output_filepath, executable_name, resize_flag, desired_width, print_flag, negate_flag, colored_flag, help_flag);
+        parse_arguments(argc, argv, input_filepath, output_filepath, executable_name, resize_flag, desired_width, print_flag, negate_flag, colored_flag, help_flag, thread_count);
 
         // Reverse the characters used for ASCII art if negate_flag is set
         if (negate_flag)
@@ -241,8 +245,12 @@ int main(int argc, char **argv)
         check_file_exist(input_filepath);
     }
 
+    std::pair<int, int> threads = calculate_thread_dimensions(thread_count);
+    int threads_x = threads.first;
+    int threads_y = threads.second;
+
     // Broadcast the configuration to all ranks
-    broadcast_config(input_filepath, output_filepath, resize_flag, desired_width, print_flag, negate_flag, colored_flag, help_flag, my_rank, CHARACTERS);
+    broadcast_config(input_filepath, output_filepath, resize_flag, desired_width, print_flag, negate_flag, colored_flag, help_flag, my_rank, CHARACTERS, threads_x, threads_y);
 
     MPI_Barrier(MPI_COMM_WORLD);
 
@@ -285,7 +293,7 @@ int main(int argc, char **argv)
     cv::Mat subimage = split_image(input_image, my_rank, num_ranks);
 
     // Process the image to get the ASCII art string and the ASCII image
-    std::pair<std::string, cv::Mat> process_output = process_image(subimage, colored_flag);
+    std::pair<std::string, cv::Mat> process_output = process_image(subimage, colored_flag, threads_x, threads_y);
     std::string processed_string = process_output.first;
     cv::Mat processed_image = process_output.second;
 
