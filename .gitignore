@@ -34,7 +34,6 @@
 .DS_Store
 .env
 
-*.pdf
 *.png
 *.jpg
 *.jpeg
