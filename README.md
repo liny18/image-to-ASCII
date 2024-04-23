@@ -2,7 +2,7 @@
 ```
 Requirements: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
 1. Compile with 'make'
-2. Usage: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
+2. Run: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
     -h, --help              Display this help message
     -i, --input  <FILE>     Specify the path of the input image filepath (required)
