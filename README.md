@@ -1,6 +1,6 @@
 ## Usage :clipboard:
 ```
-Pre-req: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
+Requirements: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
 1. Compile with 'make'
 2. Usage: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
