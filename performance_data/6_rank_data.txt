@@ -1,0 +1,4 @@
+MPI I/O operation took 710497728 cycles.
+ASCII art saved to outputs/hwoarang.txt and outputs/hwoarang_color.png
+
+Total execution time: 7.89454 seconds
