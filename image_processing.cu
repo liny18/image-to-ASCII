@@ -68,7 +68,7 @@ cv::Mat split_image(const cv::Mat &full_image, int my_rank, int num_ranks)
 }
 
 // Convert the image to ASCII art
-__global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char* output, int width, const char* device_characters, int numChars)
+__global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char* output, int width, const char* device_characters, int num_chats)
 {
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -78,11 +78,11 @@ __global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char* outp
         uchar3 pixel = input(y, x);
         // Magic 🧙🏻🧙🏻‍♂️🧙🏻‍♀️
         float gray = 0.299f * pixel.x + 0.587f * pixel.y + 0.114f * pixel.z;
-        int index = static_cast<int>(gray * (numChars - 1) / 255.0);
-        index = max(0, min(index, numChars - 1));
-        char asciiChar = device_characters[index];
+        int index = static_cast<int>(gray * (num_chats - 1) / 255);
+        index = max(0, min(index, num_chats - 1));
+        char ascii_char = device_characters[index];
 
-        output[y * width + x] = asciiChar;
+        output[y * width + x] = ascii_char;
     }
 }
 
@@ -100,11 +100,11 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
     cudaMalloc(&device_characters, char_size);
     cudaMemcpy((void*)device_characters, CHARACTERS.c_str(), char_size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(threads_x, threads_y);
-    dim3 numBlocks((image.cols + threadsPerBlock.x - 1) / threadsPerBlock.x,
-                   (image.rows + threadsPerBlock.y - 1) / threadsPerBlock.y);
+    dim3 threads_per_block(threads_x, threads_y);
+    dim3 num_blocks((image.cols + threads_per_block.x - 1) / threads_per_block.x,
+                   (image.rows + threads_per_block.y - 1) / threads_per_block.y);
 
-    imageToAsciiKernel<<<numBlocks, threadsPerBlock>>>(d_image, d_ascii_art, image.cols, device_characters, char_size);
+    imageToAsciiKernel<<<num_blocks, threads_per_block>>>(d_image, d_ascii_art, image.cols, device_characters, char_size);
     cudaDeviceSynchronize();
 
     // Copy the ASCII art from device to host
@@ -123,17 +123,17 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
     cudaFree(d_ascii_art);
 
     // Handling the drawing on host
-    cv::Mat ascii_image = cv::Mat::zeros(image.rows * 18, image.cols * 10, CV_8UC3);
+    cv::Mat ascii_image = cv::Mat::zeros(image.rows * CHARACTER_HEIGHT, image.cols * CHARACTER_WIDTH, CV_8UC3);
     for (int y = 0; y < image.rows; ++y) 
     {
         for (int x = 0; x < image.cols; ++x) 
         {
             // Get the character at the current position
             std::string text(1, ascii_art[y * image.cols + x]);
-            int posX = x * CHARACTER_WIDTH;
-            int posY = y * CHARACTER_HEIGHT + CHARACTER_HEIGHT;
+            int pos_x = x * CHARACTER_WIDTH;
+            int pox_y = y * CHARACTER_HEIGHT + CHARACTER_HEIGHT;
             cv::Scalar color = colored_flag ? image.at<cv::Vec3b>(y, x) : cv::Scalar::all(255);
-            cv::putText(ascii_image, text, cv::Point(posX, posY), cv::FONT_HERSHEY_SIMPLEX, 0.5, color, 1);
+            cv::putText(ascii_image, text, cv::Point(pos_x, pox_y), cv::FONT_HERSHEY_SIMPLEX, 0.5, color, 1);
         }
     }
 

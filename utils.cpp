@@ -81,11 +81,9 @@ std::string get_basename(const std::string &full_path)
 }
 
 // calculate the dimensions of the block that multiply to the total number of threads
-std::pair<int, int> calculate_thread_dimensions(int thread_count)
-{
+std::pair<int, int> calculate_thread_dimensions(int thread_count) {
     int x = static_cast<int>(std::sqrt(thread_count));
-    while (thread_count % x != 0)
-    {
+    while (thread_count % x != 0) {
         --x;
     }
     int y = thread_count / x;
@@ -93,7 +91,7 @@ std::pair<int, int> calculate_thread_dimensions(int thread_count)
 }
 
 // parse the command line arguments and set the configuration
-void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int &thread_count)
+void parse_arguments(int argc, char **argv, std::string &input_filepath, std::string &output_filepath, std::string &executable_name, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int & thread_count)
 {
     struct option long_options[] = {
         {"help", no_argument, nullptr, 'h'},
@@ -149,6 +147,25 @@ void parse_arguments(int argc, char **argv, std::string &input_filepath, std::st
         default:
             show_usage(executable_name);
         }
+    }
+
+    if (file_exists(input_filepath) == false)
+    {
+        std::cerr << "Error: The input file does not exist.\n";
+        help_flag = true;
+    }
+
+    // make sure all inputs numbers are valid
+    if (desired_width <= 0)
+    {
+        std::cerr << "Error: The width must be a positive integer.\n";
+        help_flag = true;
+    }
+
+    if (SCALE_FACTOR < 0.1 || SCALE_FACTOR > 1.0)
+    {
+        std::cerr << "Error: The scale factor must be between 0.1 and 1.0.\n";
+        help_flag = true;
     }
 
     if (output_filepath.empty())

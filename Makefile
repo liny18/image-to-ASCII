@@ -2,31 +2,31 @@ CXX := mpicxx # MPI compiler
 NVCC := nvcc # CUDA compiler
 CXXFLAGS := -std=c++14 -Wall -O2 $(shell pkg-config --cflags opencv4)
 CUDAFLAGS := -g -G -std=c++14 -ccbin=$(CXX) -Xcompiler "$(CXXFLAGS)" $(shell pkg-config --cflags opencv4)
-
 LDFLAGS := $(shell pkg-config --libs opencv4) -L/usr/local/cuda-11.2/lib64 -lcudadevrt -lcudart -lstdc++
 
-# Name of the executable
 TARGET := image_to_ascii
+OBJ_DIR := obj
 
-# Source files
 MPI_SRC := main.cpp utils.cpp constants.cpp
 CUDA_SRC := image_processing.cu
-# Object files
-MPI_OBJ := $(MPI_SRC:.cpp=.o)
-CUDA_OBJ := $(CUDA_SRC:.cu=.o)
+
+MPI_OBJ := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(MPI_SRC))
+CUDA_OBJ := $(patsubst %.cu, $(OBJ_DIR)/%.o, $(CUDA_SRC))
 
 all: $(TARGET)
 
 $(TARGET): $(MPI_OBJ) $(CUDA_OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
-$(MPI_OBJ): %.o: %.cpp
+$(OBJ_DIR)/%.o: %.cpp
+	mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(CUDA_OBJ): %.o: %.cu
+$(OBJ_DIR)/%.o: %.cu
+	mkdir -p $(OBJ_DIR)
 	$(NVCC) $(CUDAFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(TARGET) $(MPI_OBJ) $(CUDA_OBJ)
+	rm -rf $(OBJ_DIR) $(TARGET)
 
 .PHONY: all clean

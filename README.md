@@ -18,8 +18,8 @@ Options:
     There are 4 pre-generated images. However, if you wish to use new images (note that existing
     images will be replaced), run this command, but make sure you have an Unsplash API key saved
     in a .env file. Alternatively, you can also just add more images locally. :)    
-Notes:
-    OpenCV generates many warnings, but they do not affect the usabity of the program, savely ignore.
+Note:
+    OpenCV generates many warnings, but they do not affect the usability of the program, safely ignore.
 ```
 
 ## Examples :eyes:
