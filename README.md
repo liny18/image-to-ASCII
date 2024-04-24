@@ -31,6 +31,7 @@ Place the images you want to convert into this directory.
 ```shell
 docker run -v "$(pwd)"/outputs:/app/outputs -v "$(pwd)"/images:/app/images -it yuxlin21/image-to-ascii:[latest/cuda] '[COMMAND]'
 ```
+- ${PWD} if using PowerShell
 - Choose either latest or cuda depending on your image for [latest/cuda]
 - Replace '[COMMAND]' with these options:
 ```
