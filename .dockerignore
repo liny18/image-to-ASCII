@@ -1,0 +1,12 @@
+.vscode/
+images/
+outputs/
+paper/
+tests/
+.gitignore
+.gitattributes
+LICENSE
+README.md
+clockcycle.h
+build_image.sh
+generateImages.py

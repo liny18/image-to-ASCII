@@ -53,11 +53,11 @@ void reverse_string(std::string &str)
 // display the usage of the program
 void show_usage(const std::string &executable_name)
 {
-    std::cerr << "\nUsage: " << executable_name << " -i <FILE> [options] \n\n";
+    std::cerr << "\nUsage: 'mpirun -np <INT>" << executable_name << " -i <FILE> [options]' \n\n";
     std::cerr << "Options:\n"
                  "  -h, --help              Display this help message\n"
                  "  -i, --input  <FILE>     Specify the path of the input image FILE (required)\n"
-                 "  -o, --output <FILE>     Specify the path of the output filepath without the file extension (eg. images/image)\n"
+                 "  -o, --output <STRING>   Specify the name of the output file (e.g. 'output')\m"
                  "  -w, --width  <INT>      Set the width of the ASCII output; maintains aspect ratio\n"
                  "  -s, --chars  <STRING>   Define the set of characters used in the ASCII output\n"
                  "  -p, --print             Print the ASCII output to the console\n"
@@ -65,6 +65,7 @@ void show_usage(const std::string &executable_name)
                  "  -f, --factor  <FLOAT>   Set the scale factor from 0.1 to 1.0 (default) to resize the image\n"
                  "  -c, --color             Get ASCII PNG's in colors\n"
                  "  -t, --threads <INT>     Set the number of threads to use, default is 256\n\n";
+    std::cerr << "Example: 'mpirun -np 4 " << executable_name << " -i images/your_image.png -w 90 -c -p'\n\n";
 }
 
 // get the basename of a file, used to match the output file name with the input file name
@@ -149,12 +150,6 @@ void parse_arguments(int argc, char **argv, std::string &input_filepath, std::st
         default:
             show_usage(executable_name);
         }
-    }
-
-    if (file_exists(input_filepath) == false)
-    {
-        std::cerr << "Error: The input file does not exist.\n";
-        help_flag = true;
     }
 
     // make sure all inputs numbers are valid

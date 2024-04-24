@@ -4,7 +4,9 @@
 #include <string>
 
 // map each rank to a GPU
+#ifdef USE_GPU
 void map_rank_to_gpu(int my_rank);
+#endif // USE_GPU
 
 // load the image from the input file path
 cv::Mat load_image(const std::string &input_filepath);

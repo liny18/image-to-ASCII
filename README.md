@@ -1,8 +1,7 @@
+## Install
+
 ## Usage :clipboard:
-```
-Requirements: CMake, C++14, CUDA, MPI, OpenCV (with CUDA support), Python (Optional)
-1. Compile with 'make'
-2. Run: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
+1. Command: 'mpirun -np <INT> (number of processes) ./image_to_ascii -i <FILE> [Options]'
 Options:
     -h, --help              Display this help message
     -i, --input  <FILE>     Specify the path of the input image filepath (required)
@@ -13,14 +12,9 @@ Options:
     -n, --negate            Create a negative ASCII art
     -f, --factor <FLOAT>    Set the scale factor from 0.1 to 1.0 (default) to resize the image
     -c, --color             Get ASCII PNGs in colors
-    -t, --threads <INT>     Set the number of threads to use, default is 256
-3. (Optional) Run 'python generateImage.py <INT> (number of images)'
-    There are 4 pre-generated images. However, if you wish to use new images (note that existing
-    images will be replaced), run this command, but make sure you have an Unsplash API key saved
-    in a .env file. Alternatively, you can also just add more images locally. :)    
+    -t, --threads <INT>     Set the number of threads to use, default is 256  
 Note:
-    OpenCV generates many warnings, but they do not affect the usability of the program, safely ignore.
-```
+    Running with CUDA, OpenCV generates many warnings, but they do not affect the usability of the program, safely ignore.
 
 ## Examples :eyes:
 
