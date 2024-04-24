@@ -34,3 +34,7 @@ COPY --chown=myuser:myuser . /app
 ARG USE_CUDA
 ENV USE_GPU=${USE_CUDA}
 RUN make all
+
+ENTRYPOINT ["/bin/bash", "-c"]
+
+CMD ["mpirun -np 1 ./out -h"]
