@@ -53,7 +53,7 @@ void reverse_string(std::string &str)
 // display the usage of the program
 void show_usage(const std::string &executable_name)
 {
-    std::cerr << "\nUsage: 'mpirun -np <INT>" << executable_name << " -i <FILE> [options]' \n\n";
+    std::cerr << "\nUsage: 'mpirun -np <INT>" << executable_name << " [options]' \n\n";
     std::cerr << "Options:\n"
                  "  -h, --help              Display this help message\n"
                  "  -i, --input  <FILE>     Specify the path of the input image FILE (required)\n"
