@@ -1,21 +1,29 @@
 CXX := mpicxx # MPI compiler
 NVCC := nvcc # CUDA compiler
-CXXFLAGS := -std=c++14 -Wall -O2 $(shell pkg-config --cflags opencv4)
-CUDAFLAGS := -g -G -std=c++14 -ccbin=$(CXX) -Xcompiler "$(CXXFLAGS)" $(shell pkg-config --cflags opencv4)
-LDFLAGS := $(shell pkg-config --libs opencv4) -L/usr/local/cuda-11.2/lib64 -lcudadevrt -lcudart -lstdc++
+CXXFLAGS := -std=c++14 -Wall -O2 -march=native $(shell pkg-config --cflags opencv4)
+LDFLAGS := $(shell pkg-config --libs opencv4) -lstdc++
 
-TARGET := image_to_ascii
 OBJ_DIR := obj
+TARGET := out
 
-MPI_SRC := main.cpp utils.cpp constants.cpp
-CUDA_SRC := image_processing.cu
+# Default value for USE_GPU
+USE_GPU ?= 0
 
-MPI_OBJ := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(MPI_SRC))
-CUDA_OBJ := $(patsubst %.cu, $(OBJ_DIR)/%.o, $(CUDA_SRC))
+# Conditional setup based on USE_GPU flag
+ifeq ($(USE_GPU), 1)
+    CUDAFLAGS := -g -G -std=c++14 -ccbin=$(CXX) -Xcompiler "$(CXXFLAGS)" $(shell pkg-config --cflags opencv4)
+    CXXFLAGS += -DUSE_GPU
+    LDFLAGS += -L/usr/local/cuda/lib64 -lcudadevrt -lcudart
+    SRC := main.cpp utils.cpp constants.cpp image_processing.cu
+    OBJ := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(filter %.cpp, $(SRC))) $(patsubst %.cu, $(OBJ_DIR)/%.o, $(filter %.cu, $(SRC)))
+else
+    SRC := main.cpp utils.cpp constants.cpp image_processing.cpp
+    OBJ := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(SRC))
+endif
 
 all: $(TARGET)
 
-$(TARGET): $(MPI_OBJ) $(CUDA_OBJ)
+$(TARGET): $(OBJ)
 	$(CXX) -o $@ $^ $(LDFLAGS)
 
 $(OBJ_DIR)/%.o: %.cpp

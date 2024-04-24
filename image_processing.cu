@@ -13,31 +13,33 @@ int cudaDeviceCount;
 cudaError_t cE;
 
 // map each rank to a GPU
-void map_rank_to_gpu(int my_rank) 
+void map_rank_to_gpu(int my_rank)
 {
-    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess) {
+    if ((cE = cudaGetDeviceCount(&cudaDeviceCount)) != cudaSuccess)
+    {
         std::cerr << "Unable to determine cuda device count, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 
     // Assign GPU (simple round-robin)
     int assignedGpu = my_rank % cudaDeviceCount;
-    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess) {
+    if ((cE = cudaSetDevice(assignedGpu)) != cudaSuccess)
+    {
         std::cerr << "Unable to set cuda device, error is " << cudaGetErrorString(cE) << std::endl;
         return;
     }
 }
 
 // Load an image from the input file path
-cv::Mat load_image(const std::string &input_filepath) 
+cv::Mat load_image(const std::string &input_filepath)
 {
     cv::Mat image = cv::imread(input_filepath, cv::IMREAD_COLOR);
 
-    if (image.empty()) 
+    if (image.empty())
     {
         throw std::runtime_error("Could not read the image: " + input_filepath);
     }
-    
+
     return image;
 }
 
@@ -68,7 +70,7 @@ cv::Mat split_image(const cv::Mat &full_image, int my_rank, int num_ranks)
 }
 
 // Convert the image to ASCII art
-__global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char* output, int width, const char* device_characters, int num_chats)
+__global__ void imageToAsciiKernel(cv::cuda::PtrStepSz<uchar3> input, char *output, int width, const char *device_characters, int num_chats)
 {
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
@@ -91,18 +93,18 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
 {
     cv::cuda::GpuMat d_image(image);
     size_t num_chars = image.rows * image.cols;
-    char* d_ascii_art;
+    char *d_ascii_art;
     cudaMalloc(&d_ascii_art, sizeof(char) * num_chars);
 
     // Transfer CHARACTERS to device
-    const char* device_characters;
+    const char *device_characters;
     size_t char_size = CHARACTERS.size();
     cudaMalloc(&device_characters, char_size);
-    cudaMemcpy((void*)device_characters, CHARACTERS.c_str(), char_size, cudaMemcpyHostToDevice);
+    cudaMemcpy((void *)device_characters, CHARACTERS.c_str(), char_size, cudaMemcpyHostToDevice);
 
     dim3 threads_per_block(threads_x, threads_y);
     dim3 num_blocks((image.cols + threads_per_block.x - 1) / threads_per_block.x,
-                   (image.rows + threads_per_block.y - 1) / threads_per_block.y);
+                    (image.rows + threads_per_block.y - 1) / threads_per_block.y);
 
     imageToAsciiKernel<<<num_blocks, threads_per_block>>>(d_image, d_ascii_art, image.cols, device_characters, char_size);
     cudaDeviceSynchronize();
@@ -114,7 +116,7 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
     std::string ascii_art_str;
     // Extra space for newlines
     ascii_art_str.reserve(num_chars + image.rows);
-    for (int i = 0; i < image.rows; ++i) 
+    for (int i = 0; i < image.rows; ++i)
     {
         ascii_art_str.append(&ascii_art[i * image.cols], image.cols);
         ascii_art_str.push_back('\n');
@@ -124,9 +126,9 @@ std::pair<std::string, cv::Mat> process_image(const cv::Mat &image, bool colored
 
     // Handling the drawing on host
     cv::Mat ascii_image = cv::Mat::zeros(image.rows * CHARACTER_HEIGHT, image.cols * CHARACTER_WIDTH, CV_8UC3);
-    for (int y = 0; y < image.rows; ++y) 
+    for (int y = 0; y < image.rows; ++y)
     {
-        for (int x = 0; x < image.cols; ++x) 
+        for (int x = 0; x < image.cols; ++x)
         {
             // Get the character at the current position
             std::string text(1, ascii_art[y * image.cols + x]);

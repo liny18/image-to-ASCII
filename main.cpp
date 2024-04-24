@@ -9,14 +9,13 @@
 #include "utils.hpp"
 #include "constants.hpp"
 #include "image_processing.hpp"
-#include "clockcycle.h"
 
 using namespace constants;
 
 // ------------------ Function Prototypes ------------------
 void broadcast_config(std::string &input_filepath, std::string &output_filepath, bool &resize_flag, int &desired_width, bool &print_flag, bool &negate_flag, bool &colored_flag, bool &help_flag, int rank, std::string &CHARACTERS, int &threads_x, int &threads_y);
 void broadcast_image(cv::Mat &image, int my_rank, MPI_Comm comm);
-void gather_and_print_to_console(const std::string& processed_string, int num_ranks, int my_rank, bool print_flag, bool colored_flag, const std::string& output_filepath);
+void gather_and_print_to_console(const std::string &processed_string, int num_ranks, int my_rank, bool print_flag, bool colored_flag, const std::string &output_filepath);
 void gather_and_save_ascii_art(cv::Mat &ascii_image, int rank, int size, const std::string &output_filepath, bool colored_flag);
 void write_ascii_art_to_file(const std::string &ascii_art, const std::string &output_filepath_txt, MPI_Comm comm, int my_rank, MPI_Offset initial_offset);
 // ---------------------------------------------------------
@@ -66,21 +65,22 @@ void broadcast_config(std::string &input_filepath, std::string &output_filepath,
 }
 
 // broadcast the image dimensions and type to all ranks
-void broadcast_image(cv::Mat &image, int my_rank, MPI_Comm comm) 
+void broadcast_image(cv::Mat &image, int my_rank, MPI_Comm comm)
 {
     int dims[3] = {image.rows, image.cols, image.type()};
     MPI_Bcast(dims, 3, MPI_INT, 0, comm);
 
-    if (my_rank != 0) {
+    if (my_rank != 0)
+    {
         image.create(dims[0], dims[1], dims[2]);
     }
 
     MPI_Bcast(image.data, image.total() * image.elemSize(), MPI_BYTE, 0, comm);
 }
 
-
 // print the ASCII art in order to the console
-void gather_and_print_to_console(const std::string& processed_string, int num_ranks, int my_rank, bool print_flag, bool colored_flag, const std::string& output_filepath) {
+void gather_and_print_to_console(const std::string &processed_string, int num_ranks, int my_rank, bool print_flag, bool colored_flag, const std::string &output_filepath)
+{
     // Buffer to gather all strings
     std::vector<char> full_output;
 
@@ -94,10 +94,12 @@ void gather_and_print_to_console(const std::string& processed_string, int num_ra
     // Displacements for gather
     std::vector<int> displacements(num_ranks, 0);
 
-    if (my_rank == 0) {
+    if (my_rank == 0)
+    {
         // Compute total size and displacements
         int total_size = 0;
-        for (int i = 0; i < num_ranks; ++i) {
+        for (int i = 0; i < num_ranks; ++i)
+        {
             displacements[i] = total_size;
             total_size += sizes[i];
         }
@@ -109,7 +111,8 @@ void gather_and_print_to_console(const std::string& processed_string, int num_ra
                 full_output.data(), sizes.data(), displacements.data(), MPI_CHAR, 0, MPI_COMM_WORLD);
 
     // Print the ASCII art in order to the console
-    if (my_rank == 0 && print_flag) {
+    if (my_rank == 0 && print_flag)
+    {
         std::cout << "\n";
         std::cout.write(full_output.data(), full_output.size());
         std::string color_output_string = (colored_flag) ? "_color" : "";
@@ -171,15 +174,14 @@ void write_ascii_art_to_file(const std::string &ascii_art, const std::string &ou
     int local_size = ascii_art.size();
     MPI_Exscan(&local_size, &offset, 1, MPI_INT, MPI_SUM, comm);
 
-    if (my_rank == 0) {
+    if (my_rank == 0)
+    {
         offset = initial_offset;
-    } else {
+    }
+    else
+    {
         offset += initial_offset;
     }
-
-    #ifdef TIME
-    uint64_t start_time = clock_now();
-    #endif
     // Open the file collectively
     MPI_File_open(comm, output_filepath_txt.c_str(), MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
 
@@ -188,15 +190,6 @@ void write_ascii_art_to_file(const std::string &ascii_art, const std::string &ou
 
     // Close the file
     MPI_File_close(&fh);
-
-    #ifdef TIME
-    uint64_t end_time = clock_now();
-    uint64_t cycles_spent = end_time - start_time;
-
-    if (my_rank == 0) {
-        std::cout << "MPI I/O operation took " << cycles_spent << " cycles." << std::endl;
-    }
-    #endif
 }
 
 int main(int argc, char **argv)
@@ -208,14 +201,14 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
 
-    #ifdef TIME
+#ifdef TIME
     double start_time = 0.0, end_time = 0.0;
 
     if (my_rank == 0)
     {
         start_time = MPI_Wtime();
     }
-    #endif
+#endif // TIME
 
     std::string executable_name = argv[0];
 
@@ -274,7 +267,9 @@ int main(int argc, char **argv)
     int desired_height = 0;
     cv::Mat input_image;
 
+#ifdef USE_GPU
     map_rank_to_gpu(my_rank);
+#endif // USE_GPU
 
     if (my_rank == 0)
     {
@@ -304,7 +299,12 @@ int main(int argc, char **argv)
     cv::Mat subimage = split_image(input_image, my_rank, num_ranks);
 
     // Process the image to get the ASCII art string and the ASCII image
+#ifdef USE_GPU
     std::pair<std::string, cv::Mat> process_output = process_image(subimage, colored_flag, threads_x, threads_y);
+#else
+    std::pair<std::string, cv::Mat> process_output = process_image(subimage, colored_flag);
+#endif // USE_GPU
+
     std::string processed_string = process_output.first;
     cv::Mat processed_image = process_output.second;
 
@@ -318,10 +318,12 @@ int main(int argc, char **argv)
     std::string output_filepath_txt = "outputs/" + output_filepath + ".txt";
     MPI_Offset initial_offset = 0;
     std::string header;
-    if (my_rank == 0) {
+    if (my_rank == 0)
+    {
         header += "mpirun -np " + std::to_string(num_ranks) + " ";
         header += std::string(argv[0]) + " ";
-        for (int i = 1; i < argc; ++i) {
+        for (int i = 1; i < argc; ++i)
+        {
             header += std::string(argv[i]) + " ";
         }
         header += "\n";
@@ -337,17 +339,17 @@ int main(int argc, char **argv)
     }
 
     MPI_Bcast(&initial_offset, 1, MPI_OFFSET, 0, MPI_COMM_WORLD);
-    
+
     // Write the ASCII art to a file
     write_ascii_art_to_file(processed_string, output_filepath_txt, MPI_COMM_WORLD, my_rank, initial_offset);
 
-    #ifdef TIME
+#ifdef TIME
     if (my_rank == 0)
     {
         end_time = MPI_Wtime();
         std::cout << "Total execution time: " << end_time - start_time << " seconds" << std::endl;
     }
-    #endif
+#endif // TIME
 
     MPI_Finalize();
 

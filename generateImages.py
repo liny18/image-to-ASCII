@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 access_key = os.getenv("UNSPLASH_ACCESS_KEY")
 
-
 def main():
     if len(sys.argv) != 2:
         print("Usage: python generateImages.py <num>")
