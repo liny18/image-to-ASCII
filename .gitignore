@@ -34,7 +34,7 @@
 .DS_Store
 .env
 
-*.png
+# *.png
 *.jpg
 *.jpeg
 .txt
@@ -42,4 +42,4 @@
 image_to_ascii
 backups/
 .vscode/
-outputs/
+# outputs/
