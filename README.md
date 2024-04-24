@@ -16,7 +16,7 @@ docker pull yuxlin21/image-to-ascii:latest
 ```
 
 ### Preparing Your Images
-1. Createa an Image Directory:
+1. Create an Image Directory:
    
 Create a directory on your host machine to store the images you want to convert.
 ```shell
