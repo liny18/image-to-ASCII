@@ -1,6 +1,20 @@
 # Image to ASCII Converter
 Transform your images into ASCII art. Leveraging MPI and optional CUDA support, this application executes parallel processing to ensure both speed and efficiency in image conversion.
 
+## Examples :eyes:
+
+|                     Input                     |                                 Output                                 |
+|-----------------------------------------------|------------------------------------------------------------------------|
+| <img src="images/cpp.png" width="300">        | <img src="outputs/cpp_color.png" width="300">                          |
+| command:                                      | `mpirun -np 4 ./out -i images/cpp.png -c -w 150`            |
+| <img src="images/hwoarang.png" width="300">   | <img src="outputs/hwoarang_color.png" width="300">                     |
+| command:                                      | `mpirun -np 4 ./out -i images/hwoarang.png -c -w 150`       |
+| <img src="images/pikachu.png" width="300">    | <img src="outputs/pikachu_color.png" width="300">                      |
+| command:                                      | `mpirun -np 4 ./out -i images/pikachu.png -c -w 150`        |
+| <img src="images/miffy.png" width="300">      | <img src="outputs/miffy_color.png" width="300">                        |
+| command:                                      | `mpirun -np 4 ./out -i images/miffy.png -c -w 150`          |
+
+
 ## Installation
 If you do not have Docker installed, install at [Docker🐳](https://docs.docker.com/engine/install/)
 
@@ -55,16 +69,3 @@ docker run -v "$(pwd)"/outputs:/app/outputs -v "$(pwd)"/images:/app/images -it y
 
 Note:
     When running with CUDA, OpenCV generates many warnings, but they do not affect the usability of the program, safely ignore.
-
-## Examples :eyes:
-
-|                     Input                     |                                 Output                                 |
-|-----------------------------------------------|------------------------------------------------------------------------|
-| <img src="images/cpp.png" width="300">        | <img src="outputs/cpp_color.png" width="300">                          |
-| command:                                      | `mpirun -np 4 ./out -i images/cpp.png -c -w 150`            |
-| <img src="images/hwoarang.png" width="300">   | <img src="outputs/hwoarang_color.png" width="300">                     |
-| command:                                      | `mpirun -np 4 ./out -i images/hwoarang.png -c -w 150`       |
-| <img src="images/pikachu.png" width="300">    | <img src="outputs/pikachu_color.png" width="300">                      |
-| command:                                      | `mpirun -np 4 ./out -i images/pikachu.png -c -w 150`        |
-| <img src="images/miffy.png" width="300">      | <img src="outputs/miffy_color.png" width="300">                        |
-| command:                                      | `mpirun -np 4 ./out -i images/miffy.png -c -w 150`          |
